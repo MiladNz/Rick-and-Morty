@@ -3,7 +3,7 @@ import { allCharacters } from "../data/data";
 import "./App.css";
 import CharacterDetail from "./components/CharacterDetail";
 import CharacterList from "./components/CharacterList";
-import Navbar, { SearchResult } from "./components/Navbar";
+import Navbar, { Search, SearchResult } from "./components/Navbar";
 // import Loader from "./components/Loader";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
@@ -11,6 +11,7 @@ import axios from "axios";
 function App() {
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [query, setQuery] = useState("");
 
   // fetch("https://rickandmortyapi.com/api/character")
   //   .then((res) => res.json())
@@ -57,27 +58,28 @@ function App() {
   // }, []);
 
   //!axios + async/await + try / catch
+
   useEffect(() => {
     async function fetchData() {
       try {
         setIsLoading(true);
         const { data } = await axios.get(
-          "https://rickandmortyapi.com/api/characterss"
+          `https://rickandmortyapi.com/api/character?name=${query}`
         );
-        // console.log(res);
         setCharacters(data.results.slice(0, 5));
-        // setIsLoading(false);
       } catch (err) {
-        // console.log(err);
-        // setIsLoading(false);
-        console.log(err.message);
+        setCharacters([]);
         toast.error(err.response.data.error);
       } finally {
         setIsLoading(false);
       }
     }
+    // if (query.length < 3) {
+    //   setCharacters([]);
+    //   return;
+    // }
     fetchData();
-  }, []);
+  }, [query]);
 
   //! axios + then/catch
 
@@ -100,18 +102,15 @@ function App() {
   //     .then((res) => res.json())
   //     .then((data) => setCharacters(data.results.slice(0, 3)));
   // };
+
   return (
     <div className="app">
-      {/* <button style={{ backgroundColor: "white" }} onClick={loadCharacter}>
-        Load data
-      </button> */}
       <Toaster />
       <Navbar>
+        <Search query={query} setQuery={setQuery} />
         <SearchResult numOfResult={characters.length} />
       </Navbar>
       <Main characters={characters}>
-        {/* <CharacterList characters={characters} /> */}
-        {/* {isLoading ? <Loader /> : <CharacterList characters={characters} />} */}
         <CharacterList characters={characters} isLoading={isLoading} />
         <CharacterDetail />
       </Main>
