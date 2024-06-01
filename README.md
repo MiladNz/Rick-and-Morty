@@ -1,3 +1,3 @@
 # Rick and Morty Project 
-React + Vite
+This is a React Project with Rick and Morty API from React Course by @sahebmohammadi (https://fronthooks.ir/)
 
