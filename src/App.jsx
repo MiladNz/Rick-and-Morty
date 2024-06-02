@@ -14,52 +14,6 @@ function App() {
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
 
-  // fetch("https://rickandmortyapi.com/api/character")
-  //   .then((res) => res.json())
-  //   .then((data) => console.log(data));
-  //!WARNING : DO NOT USE .then((data) => setCharacters(data.results));
-
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   fetch("https://rickandmortyapi.com/api/character")
-  //     .then((res) => {
-  //       if (!res.ok) throw new Error("Something went wrong !!!");
-  //       return res.json();
-  //     })
-  //     .then((data) => {
-  //       setCharacters(data.results.slice(0, 5));
-  //       // setIsLoading(false);
-  //     })
-  //     .catch((err) => {
-  //       // setIsLoading(false);
-  //       toast.error(err.message);
-  //     })
-  //     .finally(() => setIsLoading(false));
-  // }, []);
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       setIsLoading(true);
-  //       const res = await fetch("https://rickandmortyapi.com/api/characterss");
-  //       // console.log(res);
-  //       if (!res.ok) throw new Error("Something went wrong !");
-  //       const data = await res.json();
-  //       setCharacters(data.results.slice(0, 5));
-  //       // setIsLoading(false);
-  //     } catch (err) {
-  //       // setIsLoading(false);
-  //       // console.log(err.message);
-  //       toast.error(err.message);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   }
-  //   fetchData();
-  // }, []);
-
-  //!axios + async/await + try / catch
-
   useEffect(() => {
     async function fetchData() {
       try {
@@ -75,40 +29,16 @@ function App() {
         setIsLoading(false);
       }
     }
-    // if (query.length < 3) {
-    //   setCharacters([]);
-    //   return;
-    // }
+    if (query.length < 3) {
+      setCharacters([]);
+      return;
+    }
     fetchData();
   }, [query]);
 
-  //! axios + then/catch
-
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   axios("https://rickandmortyapi.com/api/characterz")
-  //     .then(({ data }) => {
-  //       setCharacters(data.results.slice(0, 5));
-  //       // setIsLoading(false);
-  //     })
-  //     .catch((err) => {
-  //       // setIsLoading(false);
-  //       toast.error(err.response.data.error);
-  //     })
-  //     .finally(() => setIsLoading(false));
-  // }, []);
-
-  // const loadCharacter = () => {
-  //   fetch("https://rickandmortyapi.com/api/character")
-  //     .then((res) => res.json())
-  //     .then((data) => setCharacters(data.results.slice(0, 3)));
-  // };
-
   const handleSelectCharacter = (id) => {
-    setSelectedId(id);
+    setSelectedId((prevId) => (prevId === id ? null : id));
   };
-
-  console.log(selectedId);
 
   return (
     <div className="app">
@@ -119,6 +49,7 @@ function App() {
       </Navbar>
       <Main characters={characters}>
         <CharacterList
+          selectedId={selectedId}
           characters={characters}
           isLoading={isLoading}
           onSelectCharacter={handleSelectCharacter}
