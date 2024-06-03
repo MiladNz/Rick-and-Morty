@@ -13,18 +13,24 @@ function App() {
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
   const [favourites, setFavourites] = useState([]);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
     async function fetchData() {
       try {
         setIsLoading(true);
         const { data } = await axios.get(
-          `https://rickandmortyapi.com/api/character?name=${query}`
+          `https://rickandmortyapi.com/api/character?name=${query}`,
+          { signal }
         );
         setCharacters(data.results.slice(0, 5));
       } catch (err) {
-        setCharacters([]);
-        toast.error(err.response.data.error);
+        if (!axios.isCancel()) {
+          setCharacters([]);
+          toast.error(err.response.data.error);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -34,7 +40,18 @@ function App() {
       return;
     }
     fetchData();
+    return () => {
+      controller.abort();
+    };
   }, [query]);
+
+  //cleanup function example
+  // useEffect(() => {
+  //   const interval = setInterval(() => setCount((c) => c + 1), 1000);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, [count]);
 
   const handleSelectCharacter = (id) => {
     setSelectedId((prevId) => (prevId === id ? null : id));
@@ -49,6 +66,7 @@ function App() {
 
   return (
     <div className="app">
+      {/* <div style={{ color: "white" }}>{count}</div> */}
       <Toaster />
       <Navbar>
         <Search query={query} setQuery={setQuery} />
