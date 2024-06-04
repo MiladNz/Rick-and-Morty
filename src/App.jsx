@@ -6,6 +6,7 @@ import CharacterList from "./components/CharacterList";
 import Navbar, { Favourites, Search, SearchResult } from "./components/Navbar";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import Modal from "./components/Modal";
 
 function App() {
   const [characters, setCharacters] = useState([]);
@@ -35,10 +36,10 @@ function App() {
         setIsLoading(false);
       }
     }
-    if (query.length < 3) {
-      setCharacters([]);
-      return;
-    }
+    // if (query.length < 3) {
+    //   setCharacters([]);
+    //   return;
+    // }
     fetchData();
     return () => {
       controller.abort();
@@ -68,6 +69,7 @@ function App() {
     <div className="app">
       {/* <div style={{ color: "white" }}>{count}</div> */}
       <Toaster />
+      <Modal title={"modal test title"} open={} onOpen={}></Modal>
       <Navbar>
         <Search query={query} setQuery={setQuery} />
         <SearchResult numOfResult={characters.length} />
