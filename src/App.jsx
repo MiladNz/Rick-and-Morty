@@ -62,6 +62,9 @@ function App() {
     setFavourites((prevFav) => [...prevFav, char]);
   };
 
+  const handleDeleteFavourite = (id) => {
+    setFavourites((prevFav) => prevFav.filter((fav) => fav.id !== id));
+  };
   const isAddToFavourite = favourites.map((fav) => fav.id).includes(selectedId);
   //derived state
 
@@ -69,11 +72,14 @@ function App() {
     <div className="app">
       {/* <div style={{ color: "white" }}>{count}</div> */}
       <Toaster />
-      <Modal title={"modal test title"} open={} onOpen={}></Modal>
+      {/* <Modal title={"modal test title"} open={} onOpen={}></Modal> */}
       <Navbar>
         <Search query={query} setQuery={setQuery} />
         <SearchResult numOfResult={characters.length} />
-        <Favourites numOfFavourites={favourites.length} />
+        <Favourites
+          favourites={favourites}
+          onDeleteFavourite={handleDeleteFavourite}
+        />
       </Navbar>
       <Main characters={characters}>
         <CharacterList
