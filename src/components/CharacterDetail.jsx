@@ -38,15 +38,15 @@ function CharacterDetail({ selectedId, onAddToFavourite, isAddToFavourite }) {
 
   if (isLoading)
     return (
-      <div style={{ flex: 1, color: "var(--slate-300)" }}>
-        Please select a character
+      <div style={{ flex: 1 }}>
+        <Loader />
       </div>
     );
 
   if (!character || !selectedId)
     return (
-      <div style={{ flex: 1 }}>
-        <Loader />
+      <div style={{ flex: 1, color: "var(--slate-300)" }}>
+        Please select a character.
       </div>
     );
   return (
