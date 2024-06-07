@@ -8,18 +8,25 @@ import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import Modal from "./components/Modal";
 import useCharacters from "./hooks/useCharacter";
+import useLocalStorage from "./hooks/useLocalStorage";
 
 function App() {
   const [query, setQuery] = useState("");
+  // const [count, setCount] = useState(0);
   const { isLoading, characters } = useCharacters(
     "https://rickandmortyapi.com/api/character?name",
     query
   );
   const [selectedId, setSelectedId] = useState(null);
-  const [favourites, setFavourites] = useState(
-    () => JSON.parse(localStorage.getItem("FAVOURITES")) || []
-  );
-  // const [count, setCount] = useState(0);
+
+  const [favourites, setFavourites] = useLocalStorage("FAVOURITES", []);
+
+  // const [favourites, setFavourites] = useState(
+  //   () => JSON.parse(localStorage.getItem("FAVOURITES")) || []
+  // );
+  // useEffect(() => {
+  //   localStorage.setItem("FAVOURITES", JSON.stringify(favourites));
+  // }, [favourites]);
 
   //cleanup function example
   // useEffect(() => {
@@ -28,10 +35,6 @@ function App() {
   //     clearInterval(interval);
   //   };
   // }, [count]);
-
-  useEffect(() => {
-    localStorage.setItem("FAVOURITES", JSON.stringify(favourites));
-  }, [favourites]);
 
   const handleSelectCharacter = (id) => {
     setSelectedId((prevId) => (prevId === id ? null : id));
